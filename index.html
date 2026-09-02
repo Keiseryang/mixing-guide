@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新手调音师入门 · 从接线到第一声不爆音</title>
+<style>
+  :root{
+    --bg:#0d1117; --bg-2:#141b22; --card:#1c2330; --card-2:#222b3a;
+    --border:#2d3748; --text:#e6edf3; --muted:#9aa7b8;
+    --accent:#ff6b4a; --accent-2:#ffb14a; --blue:#4aa8ff; --green:#3ecf8e;
+    --purple:#a78bfa; --pink:#f472b6; --red:#ff5b6a;
+    --nav-bg:rgba(13,17,23,.85); --line:rgba(255,255,255,.07);
+    --accent-rgb:255,107,74;
+    --radius:14px; --shadow:0 8px 30px rgba(0,0,0,.35);
+  }
+  /* 浅色主题 */
+  :root[data-theme="light"]{
+    --bg:#f5f7fa; --bg-2:#eef1f5; --card:#ffffff; --card-2:#eef1f6;
+    --border:#d5dbe3; --text:#1f2937; --muted:#5b6675;
+    --accent:#0d9488; --accent-2:#06b6d4; --blue:#0891b2; --green:#16a34a;
+    --purple:#7c3aed; --pink:#db2777; --red:#dc2626;
+    --nav-bg:rgba(255,255,255,.85); --line:rgba(0,0,0,.08);
+    --accent-rgb:13,148,136;
+    --shadow:0 8px 30px rgba(0,0,0,.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;line-height:1.75;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+
+  /* ===== 顶部导航 ===== */
+  nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  nav .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;height:60px;padding:0 20px}
+  .brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.7)}
+  .links{display:flex;gap:4px;overflow-x:auto;margin-left:auto;white-space:nowrap;scrollbar-width:none}
+  .links::-webkit-scrollbar{display:none}
+  .links a{padding:6px 12px;border-radius:8px;color:var(--muted);font-weight:600;font-size:14px;transition:.2s}
+  .links a:hover{color:var(--text);background:var(--card-2)}
+  .theme-btn{margin-left:6px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:7px 12px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s}
+  .theme-btn:hover{background:var(--card-2)}
+
+  /* ===== 布局 ===== */
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+  section{padding:46px 0;border-bottom:1px solid var(--line);scroll-margin-top:70px}
+  .eyebrow{color:var(--accent);font-weight:800;letter-spacing:2px;font-size:13px;text-transform:uppercase}
+  h2{font-size:30px;font-weight:800;margin:8px 0 6px}
+  .lead{color:var(--muted);max-width:760px;margin-bottom:26px}
+  h3{font-size:20px;font-weight:750;margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h3 .num{width:26px;height:26px;border-radius:8px;background:rgba(var(--accent-rgb),.15);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+  p{color:var(--text);margin-bottom:10px}
+  .muted{color:var(--muted)}
+
+  /* ===== 卡片网格 ===== */
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:.2s}
+  .card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:var(--shadow)}
+  .card h4{font-size:16px;font-weight:750;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .card .ico{font-size:20px}
+  .card p{font-size:14px;color:var(--muted);margin:0}
+  .card .cimg{width:100%;height:180px;object-fit:contain;background:var(--card-2);border-radius:8px;padding:6px;margin-bottom:10px;border:1px solid var(--border);display:block}
+
+  /* ===== 图示区 ===== */
+  .dia{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .dia svg{max-width:100%;height:auto}
+  .dia .cap{font-size:13px;color:var(--muted);text-align:center}
+
+  /* ===== 表格 ===== */
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
+  th{background:var(--card-2);font-weight:750;color:var(--text)}
+  td{color:var(--text)}
+  td.yes{color:var(--green);font-weight:700}
+  td.no{color:var(--red);font-weight:700}
+
+  /* ===== 警示提示框 ===== */
+  .note{border-radius:var(--radius);padding:16px 18px;margin:18px 0;border:1px solid var(--border);display:flex;gap:12px;align-items:flex-start;font-size:14.5px}
+  .note .ni{font-size:22px;flex-shrink:0;line-height:1}
+  .note.warn{background:rgba(255,91,106,.08);border-color:rgba(255,91,106,.35)}
+  .note.tip{background:rgba(62,207,142,.08);border-color:rgba(62,207,142,.35)}
+  .note.info{background:rgba(74,168,255,.08);border-color:rgba(74,168,255,.35)}
+  .note b{display:block;margin-bottom:3px}
+
+  /* ===== 步骤 / 检查清单 ===== */
+  .steps{counter-reset:st;display:grid;gap:14px;margin:16px 0}
+  .step{position:relative;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 16px 54px}
+  .step::before{counter-increment:st;content:counter(st);position:absolute;left:16px;top:16px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+  .step h4{margin-bottom:4px;font-size:15.5px}
+  .step p{color:var(--muted);font-size:14px;margin:0}
+
+  ul.clean{list-style:none;display:grid;gap:8px}
+  ul.clean li{position:relative;padding-left:24px;font-size:14.5px}
+  ul.clean li:before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+
+  .checklist{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+  .checklist h3{margin-top:0}
+  .checklist label{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);cursor:pointer;font-size:15px}
+  .checklist label:last-child{border-bottom:none}
+  .checklist input{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0}
+
+  .badge{display:inline-block;background:rgba(var(--accent-rgb),.15);color:var(--accent);border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700;vertical-align:middle}
+  .sep{height:1px;background:var(--line);margin:22px 0}
+
+  .video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-top:8px}
+  .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+  footer{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px}
+  footer .tt{font-weight:800;color:var(--text);margin-bottom:6px}
+
+  @media (max-width:820px){
+    h2{font-size:24px}
+    .g3,.g4{grid-template-columns:repeat(2,1fr)}
+    .brand{font-size:15px}
+    .links{gap:0}
+    .links a{padding:6px 9px;font-size:13px}
+  }
+  @media (max-width:520px){
+    .g2,.g3,.g4{grid-template-columns:1fr}
+    section{padding:36px 0}
+    nav .inner{height:auto;flex-wrap:wrap;padding:10px 16px}
+    .theme-btn{padding:6px 10px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <div class="brand"><span class="dot"></span>调音新手入门</div>
+    <div class="links">
+      <a href="#cable">① 线材</a>
+      <a href="#mic">② 麦克风·48V</a>
+      <a href="#scene">③ 接线实战</a>
+    </div>
+    <button class="theme-btn" id="themeBtn">🌙 深色</button>
+  </div>
+</nav>
+
+<!-- ================= 头部 ================= -->
+<header class="wrap" style="padding:52px 20px 40px">
+  <span class="eyebrow">BEGINNER SOUND ENGINEER</span>
+  <h2 style="font-size:38px;margin-top:8px">新手调音师入门</h2>
+  <p class="lead" style="font-size:17px">不讲花哨技巧，只打好最关键的「地基」——认识线材接口、会用麦克风、正确接线、不爆音。学完你就能安全地把声音接进调音台。</p>
+  <div class="grid g3" style="margin-top:6px">
+    <div class="card"><div class="ico">🔌</div><h4>线材与收纳</h4><p>认识常见线材，学会理线和绕线，告别一团糟。</p></div>
+    <div class="card"><div class="ico">🎤</div><h4>麦克风与48V</h4><p>哪种麦需要 48V？正确开关，别把设备弄坏。</p></div>
+    <div class="card"><div class="ico">🔧</div><h4>接线实战</h4><p>看懂信号流：设备、麦克风、键盘、排查。</p></div>
+  </div>
+</header>
+
+<!-- ================= ① 线材 ================= -->
+<section id="cable">
+  <div class="wrap">
+    <span class="eyebrow">P01 线材</span>
+    <h2>线材的认识与管理收纳</h2>
+    <p class="lead">先分清<b>哪根线干嘛</b>，再学会<b>别让线打结绊倒人</b>。</p>
+    <div class="sep"></div>
+
+    <h3><span class="num">1</span>认识常见线材</h3>
+    <p class="muted">现场最常用的就这几种，记住它们的外形和用途即可。</p>
+    <div class="grid g2">
+      <div class="card"><img class="cimg" src="图片/XLR 公母.png" alt="XLR 卡侬线 公母头"><div class="ico">🎙️</div><h4>XLR 卡侬线</h4><p>抗干扰的「平衡线」，麦克风/主输出常用。分<b>公头（3针）</b>与<b>母头（3孔）</b>。</p></div>
+      <div class="card"><img class="cimg" src="图片/大三芯吉他线.png" alt="TRS 大三芯吉他线"><div class="ico">🔩</div><h4>TRS 大三芯</h4><p>6.35mm 三圈「平衡线」，<b>插头为公头</b>。乐器、监听、输出常用。</p></div>
+      <div class="card"><img class="cimg" src="图片/大二芯吉他线.png" alt="TS 大二芯吉他线"><div class="ico">🎸</div><h4>TS 大二芯</h4><p>6.35mm 两圈「非平衡线」，电吉他/键盘等<b>短线</b>用。</p></div>
+
+      <div class="card"><img class="cimg" src="图片/功放线.png" alt="功放线 电源线+信号线"><div class="ico">🔊</div><h4>功放线（电源线+信号线）</h4><p>功放供电用<b>电源线</b>，声音到音箱用<b>信号线</b>（图：带锁扣的 Speakon 线）。</p></div>
+    </div>
+
+    <h3><span class="num">2</span>怎么看「公头 & 母头」（重要！）</h3>
+    <p class="muted"><b>凸出=公头、凹陷=母头</b>；<b>输出端用公头、输入端用母头</b>，避免带电针脚碰金属。</p>
+    <div class="dia" style="margin-bottom:8px">
+      <svg viewBox="0 0 880 420" width="880" role="img" aria-label="XLR公头母头对比图">
+        <!-- 公头 -->
+        <g transform="translate(20,20)">
+          <rect x="0" y="0" width="410" height="380" rx="16" fill="#222b3a" stroke="#2d3748"/>
+          <text x="205" y="34" text-anchor="middle" fill="#e6edf3" font-size="17" font-weight="800">XLR 公头 Male</text>
+          <circle cx="205" cy="140" r="58" fill="#161b22" stroke="#ff6b4a" stroke-width="3"/>
+          <circle cx="205" cy="112" r="11" fill="#ff6b4a"/>
+          <circle cx="176" cy="162" r="11" fill="#ff6b4a"/>
+          <circle cx="234" cy="162" r="11" fill="#ff6b4a"/>
+          <text x="205" y="230" text-anchor="middle" fill="#3ecf8e" font-size="14" font-weight="700">● 3 根针「凸出来」</text>
+          <rect x="50" y="256" width="310" height="36" rx="10" fill="#2d3748"/>
+          <rect x="288" y="256" width="72" height="36" rx="6" fill="#1c2330" stroke="#ff6b4a" stroke-width="2"/>
+          <rect x="360" y="266" width="20" height="5" fill="#ff6b4a"/>
+          <rect x="360" y="277" width="20" height="5" fill="#ff6b4a"/>
+          <rect x="360" y="288" width="20" height="5" fill="#ff6b4a"/>
+          <text x="60" y="312" fill="#9aa7b8" font-size="12">侧面：针往外伸 → 去插对方</text>
+          <text x="205" y="350" text-anchor="middle" fill="#9aa7b8" font-size="13">常见在：麦克风输出端 / 线的一头</text>
+        </g>
+        <!-- 母头 -->
+        <g transform="translate(450,20)">
+          <rect x="0" y="0" width="410" height="380" rx="10" fill="#222b3a" stroke="#2d3748"/>
+          <text x="205" y="34" text-anchor="middle" fill="#e6edf3" font-size="17" font-weight="800">XLR 母头 Female</text>
+          <circle cx="205" cy="140" r="58" fill="#161b22" stroke="#3ecf8e" stroke-width="3"/>
+          <circle cx="205" cy="112" r="13" fill="#161b22" stroke="#3ecf8e" stroke-width="3"/>
+          <circle cx="176" cy="162" r="13" fill="#161b22" stroke="#3ecf8e" stroke-width="3"/>
+          <circle cx="234" cy="162" r="13" fill="#161b22" stroke="#3ecf8e" stroke-width="3"/>
+          <text x="205" y="230" text-anchor="middle" fill="#3ecf8e" font-size="14" font-weight="700">○ 3 个孔「凹进去」</text>
+          <rect x="50" y="256" width="310" height="36" rx="10" fill="#2d3748"/>
+          <rect x="288" y="256" width="72" height="36" rx="6" fill="#1c2330" stroke="#3ecf8e" stroke-width="2"/>
+          <circle cx="366" cy="268" r="6" fill="#161b22" stroke="#3ecf8e" stroke-width="2"/>
+          <circle cx="366" cy="282" r="6" fill="#161b22" stroke="#3ecf8e" stroke-width="2"/>
+          <text x="60" y="312" fill="#9aa7b8" font-size="12">侧面：孔往里凹 → 接收对方</text>
+          <text x="205" y="350" text-anchor="middle" fill="#9aa7b8" font-size="13">常见在：调音台输入端 / 线的一头</text>
+        </g>
+      </svg>
+      <div class="cap"><b>凸=公、凹=母</b>，公去插、母被插。一根 XLR 线一头公、一头母。</div>
+    </div>
+
+    <div class="note tip">
+      <div class="ni">💡</div>
+      <div><b>一句话分</b>：<b>三根/三圈=平衡</b>（抗干扰、长线）；<b>两圈=非平衡</b>（短线、家用）。现场尽量用平衡线。</div>
+    </div>
+
+    <h3><span class="num">3</span>怎么管理线材：理线 & 绕线</h3>
+    <div class="grid g2">
+      <div>
+        <h4>⊕ 绕线手法（正反绕 / 8 字绕法）</h4>
+        <div class="video-wrap">
+          <iframe src="https://player.bilibili.com/player.html?bvid=BV1kr421b73X&page=1&high_quality=1&danmaku=0" scrolling="no" frameborder="no" allowfullscreen="true" title="正反绕线教学"></iframe>
+        </div>
+        <p class="muted" style="margin-top:10px;font-size:14px">正反交叉着绕，线<b>不自动打结</b>，一拉就开。<b>别硬拽、留余量、接头处别勒死。</b></p>
+      </div>
+      <div>
+        <h4>⊕ 上电前 \ 收工后</h4>
+        <ul class="clean" style="margin-top:6px">
+          <li>接线前摆顺线、<b>两头贴标签编号</b>。</li>
+          <li>横穿走道用<b>扎带 / 盖线槽</b>固定，防绊倒。</li>
+          <li>收工按编号收回，别随手一丢。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <div class="ni">⚠️</div>
+      <div><b>安全提醒</b>散线=绊倒隐患。横穿走道要<b>贴地固定</b>，接头保持干燥清洁。</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= ③ 麦克风 48V ================= -->
+<section id="mic">
+  <div class="wrap">
+    <span class="eyebrow">P02 麦克风</span>
+    <h2>麦克风的认识与 48V 幻象电源</h2>
+    <p class="lead">先分清<b>动圈 / 电容</b>，再记住<b>谁要 48V</b>，别把设备烧了。</p>
+    <div class="sep"></div>
+
+    <h3><span class="num">1</span>两种常用麦克风</h3>
+    <div class="grid g2">
+      <div class="card"><div class="ico">🎤</div><h4>动圈麦</h4><p>结实抗干扰，现场人声首选。经典如 SM58。<b>不需要供电</b>。</p></div>
+      <div class="card"><div class="ico">✨</div><h4>电容麦</h4><p>细腻灵敏，分<b>小振膜</b>（乐器）和<b>大振膜</b>（人声）。<b>需要 48V 供电</b>。</p></div>
+    </div>
+
+    <h3><span class="num">2</span>一句话记住 48V</h3>
+    <div class="note tip">
+      <div class="ni">🔑</div>
+      <div>只有<b style="display:inline">电容麦克风</b>和<b style="display:inline">主动 DI 盒</b>需要幻象供电；其它<b style="display:inline">自己有电的设备千万别开</b>，会烧掉，烧了要赔钱。</div>
+    </div>
+
+    <h3><span class="num">3</span>DI 盒（乐器进调音台）</h3>
+    <p class="muted">把吉他/贝斯转成平衡信号，长距离不衰减。</p>
+    <div class="grid g2">
+      <div class="card"><img class="cimg" src="图片/J48 DI盒.png" alt="J48 有源DI盒"><div class="ico">🔌</div><h4>J48（有源）</h4><p>需 <b>48V</b> 或电池供电。</p></div>
+      <div class="card"><img class="cimg" src="图片/JDI 被动DI盒.png" alt="JDI 无源DI盒"><div class="ico">🪶</div><h4>JDI（无源）</h4><p>不需供电，纯变压器。</p></div>
+    </div>
+
+    <h3><span class="num">4</span>人声麦克风的选择</h3>
+    <p class="muted">常见经典，选对少走弯路。</p>
+    <table>
+      <tr><th>型号</th><th>类型</th><th>适合</th></tr>
+      <tr><td><b>Shure SM58</b></td><td>动圈</td><td>现场主唱首选，抗干扰、不易啸叫</td></tr>
+      <tr><td><b>Shure SM57</b></td><td>动圈</td><td>人声/乐器都行，声音比 58 更亮更贴</td></tr>
+      <tr><td><b>Shure Beta 181C</b></td><td>电容</td><td>小振膜，主打<b>乐器/弦乐</b>，细节好</td></tr>
+      <tr><td><b>Sennheiser E935</b></td><td>动圈</td><td>现场人声，声音前突有力不费劲</td></tr>
+      <tr><td><b>Shure KSM9</b></td><td>电容</td><td>录音/抒情人声，细腻，需 48V</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<section id="scene">
+  <div class="wrap">
+    <span class="eyebrow">P03 接线实战</span>
+    <h2>现场接线实战</h2>
+    <p class="lead">看懂这一场：<b>Avantis</b> 在 FOH，<b>GX4816</b> 在舞台侧面，两根 <b>12 路多芯缆</b>接进接口箱 <b>1–24 路</b>。</p>
+    <div class="sep"></div>
+
+    <div class="grid g3">
+      <div class="card"><img class="cimg" src="图片/avantis.png" alt="Allen Heath Avantis 调音台"><div class="ico">🎛️</div><h4>Avantis</h4><p>调音台 · <b>FOH</b> 位置，负责调音。</p></div>
+      <div class="card"><img class="cimg" src="图片/GX4816.png" alt="GX4816 接口箱"><div class="ico">📦</div><h4>GX4816</h4><p>接口箱 · <b>舞台侧面</b>，48 入 16 出。</p></div>
+      <div class="card"><img class="cimg" src="图片/12路多芯榄盒.png" alt="12路多芯缆"><div class="ico">🧬</div><h4>12 路多芯缆</h4><p>两根（<b>舞台左侧 / 中前</b>），接进接口箱 1–24 路。</p></div>
+    </div>
+
+    <div class="note info">
+      <div class="ni">🔀</div>
+      <div><b>信号流</b>：舞台乐器/麦克风 → 12 路多芯缆 → GX4816 输入 1–24 → 数字链路 → Avantis 通道 →<b>调 GAIN</b>。本模块重点在这一环节。</div>
+    </div>
+
+    <h3><span class="num">1</span>谁用麦克风拾音，谁直接乐器线输出</h3>
+    <div class="grid g2">
+      <div>
+        <h4>🎤 用麦克风拾音（声学/需扩声）</h4>
+        <ul class="clean" style="margin-top:6px">
+          <li>人声（主唱 / 和声）</li>
+          <li>鼓组：底鼓、军鼓、通鼓、镲片</li>
+          <li>原声吉他 / 木吉他</li>
+          <li>铜管、木管、弦乐、手风琴等</li>
+          <li>电吉他音箱（用麦对着喇叭拾音）</li>
+        </ul>
+      </div>
+      <div>
+        <h4>🔌 直接用乐器线（电声/有输出）</h4>
+        <ul class="clean" style="margin-top:6px">
+          <li>电吉他 / 贝斯（高阻输出）</li>
+          <li>键盘、合成器（线路输出）</li>
+          <li>电箱琴（带拾音器，直接接）</li>
+          <li>采样器、音源等电子乐器</li>
+          <li>需要 DI 或高阻通道（见下）</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3><span class="num">2</span>① 怎么把麦克风接入调音台</h3>
+    <div class="steps">
+      <div class="step"><h4>麦克风 → 多芯缆 → 接口箱 → 调音台</h4><p>卡侬线(XLR)接入多芯缆对应通道，在 Avantis 找对通道号，再调 GAIN。</p></div>
+      <div class="step"><h4>按类型决定是否开 48V</h4><p>动圈麦<b>不用</b>，电容麦<b>要开</b>。</p></div>
+      <div class="step"><h4>用耳机 PFL 看电平</h4><p>推子前先定 GAIN，让信号落在绿区。</p></div>
+    </div>
+
+    <h3><span class="num">3</span>② 怎么把键盘接入（两种方式）</h3>
+    <div class="grid g2">
+      <div class="card" style="border-left:4px solid var(--green)">
+        <h4>方式一 · DI 盒</h4>
+        <p>键盘 → <b>DI</b> → 卡侬 → 多芯缆 → 接口箱。声音更稳、可长距离。</p>
+        <ul class="clean" style="margin-top:6px">
+          <li><b>J48</b>：有源，<b>要开 48V</b></li>
+          <li><b>JDI</b>：无源，<b>不用 48V</b></li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:4px solid var(--blue)">
+        <h4>方式二 · 大三芯转卡农线</h4>
+        <p>键盘(TRS out) → <b>TRS 转 XLR</b> → 多芯缆 → 接口箱。</p>
+        <ul class="clean" style="margin-top:6px">
+          <li>线路信号，<b>不用供电</b></li>
+          <li>若键盘输出非平衡，长线易受干扰</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3><span class="num">4</span>③ 简单排查（乐器 → 通道 GAIN 这一步）</h3>
+    <table>
+      <tr><th>现象</th><th>先查</th></tr>
+      <tr><td>完全没声音</td><td>线插对没、接口箱上电没、通道号对不对、GAIN 太低、是否静音</td></tr>
+      <tr><td>信号太弱</td><td>把 GAIN 往大调，用 PFL 看电平表</td></tr>
+      <tr><td>爆音 / 削顶</td><td>GAIN 太高，调小，别进红区</td></tr>
+      <tr><td>嗡嗡底噪</td><td>是否误开 48V、地环路、线材接触（换平衡线）</td></tr>
+      <tr><td>只有单边响</td><td>线材接触、通道坏、声像(PAN)打偏</td></tr>
+      <tr><td>啸叫</td><td>话筒对着音箱，先降该通道增益</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="tt">🎧 新手调音师入门</div>
+  <div>静下心来，按流程走，你就能安全地把声音接进调音台。<br>祝你的第一场演出不爆音、不啸叫、一切顺利。</div>
+</footer>
+
+<script>
+  // 明暗主题切换
+  (function(){
+    var btn=document.getElementById('themeBtn');
+    var saved=localStorage.getItem('theme');
+    function apply(t){
+      document.documentElement.setAttribute('data-theme',t);
+      btn.textContent = t==='light'?'🌙 深色':'☀️ 浅色';
+      localStorage.setItem('theme',t);
+    }
+    apply(saved||'dark');
+    btn.addEventListener('click',function(){
+      var cur=document.documentElement.getAttribute('data-theme');
+      apply(cur==='light'?'dark':'light');
+    });
+    // 若系统偏好与默认一致，自动跟随（可选增强）
+    if(!saved && window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches){
+      apply('light');
+    }
+  })();
+</script>
+</body>
+</html>
