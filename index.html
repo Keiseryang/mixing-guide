@@ -435,16 +435,21 @@
     }
   })();
 
-  // 顶栏滚动隐藏/显示：下滑收起，上滑弹出（移动端省空间）
+  // 顶栏滚动隐藏/显示：下滑收起，上滑弹出（兼容移动端触屏）
   (function(){
     var nav=document.querySelector('nav');
-    var lastY=window.scrollY;
-    window.addEventListener('scroll',function(){
-      var y=window.scrollY;
+    var lastY=0;
+    function getY(){ return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; }
+    function update(){
+      var y=getY();
       if(y>lastY && y>80){ nav.classList.add('nav-hide'); }
       else { nav.classList.remove('nav-hide'); }
       lastY=y;
-    },{passive:true});
+    }
+    // 鼠标滚轮 / 桌面
+    window.addEventListener('scroll',update,{passive:true});
+    // 移动端触屏滚动时 scroll 事件可能不触发，用 touchmove 兜底
+    window.addEventListener('touchmove',update,{passive:true});
   })();
 </script>
 </body>
