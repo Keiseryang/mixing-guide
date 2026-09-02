@@ -42,20 +42,6 @@
   .theme-btn{margin-left:6px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:7px 12px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s}
   .theme-btn:hover{background:var(--card-2)}
 
-  /* 手机阅读模式：更大字号、更宽行距、内容聚焦（保留图示） */
-  body.reading{font-size:17px}
-  body.reading p, body.reading li, body.reading td, body.reading th{font-size:16.5px;line-height:1.9}
-  body.reading .lead{font-size:18px;line-height:1.8;max-width:640px}
-  body.reading h2{font-size:27px}
-  body.reading h3{font-size:20px}
-  body.reading h4{font-size:17.5px}
-  body.reading section{padding:44px 0}
-  body.reading .wrap{max-width:760px}
-  body.reading .note{font-size:15.5px;line-height:1.7}
-  body.reading table{font-size:15px}
-  body.reading table td, body.reading table th{padding:10px 12px;line-height:1.7}
-  body.reading .card{line-height:1.7}
-
   /* ===== 布局 ===== */
   .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
   section{padding:46px 0;border-bottom:1px solid var(--line);scroll-margin-top:70px}
@@ -153,7 +139,6 @@
       <a href="#band">④ 现场设置</a>
     </div>
     <button class="theme-btn" id="themeBtn">🌙 深色</button>
-    <button class="theme-btn" id="readBtn">📱 阅读</button>
   </div>
 </nav>
 
@@ -448,22 +433,6 @@
     if(!saved && window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches){
       apply('light');
     }
-  })();
-
-  // 手机阅读模式切换
-  (function(){
-    var btn=document.getElementById('readBtn');
-    var saved=localStorage.getItem('reading');
-    function apply(r){
-      document.body.classList.toggle('reading', r==='1');
-      btn.textContent = r==='1' ? '🌐 网页' : '📱 阅读';
-      localStorage.setItem('reading', r==='1'?'1':'0');
-    }
-    apply(saved||'0');
-    btn.addEventListener('click',function(){
-      var r=document.body.classList.contains('reading');
-      apply(r?'0':'1');
-    });
   })();
 
   // 顶栏滚动隐藏/显示：下滑收起，上滑弹出（兼容移动端触屏）
