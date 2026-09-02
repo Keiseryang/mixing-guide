@@ -30,8 +30,7 @@
   a{color:var(--accent);text-decoration:none}
 
   /* ===== 顶部导航 ===== */
-  nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:transform .3s ease}
-  nav.nav-hide{transform:translateY(-100%)}
+  nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);will-change:transform}
   nav .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;height:60px;padding:0 20px}
   .brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;white-space:nowrap}
   .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.7)}
@@ -435,27 +434,19 @@
     }
   })();
 
-  // 顶栏滚动隐藏/显示：累积位移 + 死区，避免轻微来回抽筋
+  // 顶栏跟手：下滑时随滚动一起往上推直到收起，上滑时跟着下来
   (function(){
     var nav=document.querySelector('nav');
-    var lastY=0, acc=0, THRESHOLD=120;
     function getY(){ return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; }
     function update(){
       var y=getY();
-      var d=y-lastY;
-      lastY=y;
-      if(Math.abs(d)<0.5){ return; }
-      // 页面顶部附近恒显示，避免刚滚出一点就被藏起来
-      if(y<=80){ nav.classList.remove('nav-hide'); acc=0; return; }
-      acc+=d;
-      // 连续同一方向累积超过阈值才切换一次
-      if(acc>THRESHOLD){ nav.classList.add('nav-hide'); acc=0; }
-      else if(acc<-THRESHOLD){ nav.classList.remove('nav-hide'); acc=0; }
+      var navH=nav.offsetHeight || 60;
+      var hidden=Math.max(0, Math.min(y, navH)); // 往下滚多少，顶栏就收起多少，完全跟手
+      nav.style.transform='translateY('+(-hidden)+'px)';
     }
-    // 鼠标滚轮 / 桌面
     window.addEventListener('scroll',update,{passive:true});
-    // 移动端触屏滚动时 scroll 事件可能不触发，用 touchmove 兜底
     window.addEventListener('touchmove',update,{passive:true});
+    update();
   })();
 </script>
 </body>
