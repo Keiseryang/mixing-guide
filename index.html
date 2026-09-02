@@ -30,7 +30,7 @@
   a{color:var(--accent);text-decoration:none}
 
   /* ===== 顶部导航 ===== */
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);will-change:transform;transition:transform .25s ease}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);will-change:transform}
   nav .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;height:60px;padding:0 20px}
   .brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;white-space:nowrap}
   .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px rgba(var(--accent-rgb),.7)}
@@ -445,22 +445,16 @@
     window.addEventListener('resize',setPad);
     function getY(){ var d=document.documentElement,b=document.body;
       return (window.pageYOffset||d.scrollTop||b.scrollTop||0); }
-    var lastY=getY(), acc=0, dir='', THRESH=40;   // 死区40px：连续同向累积超过才切换，避免抽筋
+    var lastY=getY(), hide=0;   // hide：顶栏当前收起量，随滚动增量变化（跟手）
     function update(){
-      var y=getY();
-      var d=y-lastY;
+      var y=getY(), d=y-lastY;
       lastY=y;
       if(Math.abs(d)<0.5){ return; }
-      // 靠近顶部恒显示
-      if(y<=80){ nav.style.transform='translateY(0)'; acc=0; return; }
-      // 方向感知：上滑弹出、下滑收起
-      var nd = d>0 ? 'down' : 'up';
-      if(nd!==dir){ dir=nd; acc=0; }
-      acc+=Math.abs(d);
-      if(acc>THRESH){
-        nav.style.transform = (dir==='up') ? 'translateY(0)' : 'translateY(-100%)';
-        acc=0;
-      }
+      var navH=nav.offsetHeight||60;
+      if(y<=80){ hide=0; }              // 靠近顶部恒显示
+      else { hide += d; }               // 下滚增(收)、上滚减(弹)，增量跟手
+      hide=Math.max(0,Math.min(hide,navH));
+      nav.style.transform='translateY('+(-hide)+'px)';
     }
     window.addEventListener('scroll',update,{passive:true});
     document.addEventListener('scroll',update,{passive:true,capture:true});
