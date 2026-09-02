@@ -435,16 +435,22 @@
     }
   })();
 
-  // 顶栏滚动隐藏/显示：下滑收起，上滑弹出（兼容移动端触屏）
+  // 顶栏滚动隐藏/显示：累积位移 + 死区，避免轻微来回抽筋
   (function(){
     var nav=document.querySelector('nav');
-    var lastY=0;
+    var lastY=0, acc=0, THRESHOLD=120;
     function getY(){ return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; }
     function update(){
       var y=getY();
-      if(y>lastY && y>80){ nav.classList.add('nav-hide'); }
-      else { nav.classList.remove('nav-hide'); }
+      var d=y-lastY;
       lastY=y;
+      if(Math.abs(d)<0.5){ return; }
+      // 页面顶部附近恒显示，避免刚滚出一点就被藏起来
+      if(y<=80){ nav.classList.remove('nav-hide'); acc=0; return; }
+      acc+=d;
+      // 连续同一方向累积超过阈值才切换一次
+      if(acc>THRESHOLD){ nav.classList.add('nav-hide'); acc=0; }
+      else if(acc<-THRESHOLD){ nav.classList.remove('nav-hide'); acc=0; }
     }
     // 鼠标滚轮 / 桌面
     window.addEventListener('scroll',update,{passive:true});
