@@ -83,7 +83,7 @@
   .note.warn{background:rgba(255,91,106,.08);border-color:rgba(255,91,106,.35)}
   .note.tip{background:rgba(62,207,142,.08);border-color:rgba(62,207,142,.35)}
   .note.info{background:rgba(74,168,255,.08);border-color:rgba(74,168,255,.35)}
-  .note b{display:block;margin-bottom:3px}
+  .note b{font-weight:700}  /* 加粗词保持内联，避免被拆成一行行 */
 
   /* ===== 步骤 / 检查清单 ===== */
   .steps{counter-reset:st;display:grid;gap:14px;margin:16px 0}
@@ -107,6 +107,19 @@
 
   .video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-top:8px}
   .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+
+  /* ===== Q&A 折叠 ===== */
+  .faq{display:grid;gap:14px}
+  .faq details{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:.2s}
+  .faq details[open]{border-color:var(--accent)}
+  .faq summary{cursor:pointer;padding:16px 18px;display:flex;align-items:center;gap:12px;font-weight:750;font-size:15.5px;list-style:none}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary .q{width:26px;height:26px;border-radius:8px;background:rgba(var(--accent-rgb),.15);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+  .faq summary .ar{margin-left:auto;transition:.2s;color:var(--muted);font-size:16px}
+  .faq details[open] summary .ar{transform:rotate(180deg)}
+  .faq .ans{padding:0 18px 18px 56px;color:var(--text);font-size:15px}
+  .faq .ans p{margin-top:0}
+  @media (max-width:520px){.faq .ans{padding:0 14px 14px 50px}}
 
   footer{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px}
   footer .tt{font-weight:800;color:var(--text);margin-bottom:6px}
@@ -136,6 +149,7 @@
       <a href="#mic">② 麦克风·48V</a>
       <a href="#scene">③ 接线实战</a>
       <a href="#band">④ 现场设置</a>
+      <a href="#qa">⑤ Q&amp;A</a>
     </div>
     <button class="theme-btn" id="themeBtn">🌙 深色</button>
   </div>
@@ -238,7 +252,7 @@
 
     <div class="note warn">
       <div class="ni">⚠️</div>
-      <div><b>安全提醒</b>散线=绊倒隐患。横穿走道要<b>贴地固定</b>，接头保持干燥清洁。</div>
+      <div><b>安全提醒</b>：散线=绊倒隐患。横穿走道要<b>贴地固定</b>，接头保持干燥清洁。</div>
     </div>
   </div>
 </section>
@@ -261,7 +275,7 @@
     <h3><span class="num">2</span>一句话记住 48V</h3>
     <div class="note tip">
       <div class="ni">🔑</div>
-      <div>只有<b style="display:inline">电容麦克风</b>和<b style="display:inline">主动 DI 盒</b>需要幻象供电；其它<b style="display:inline">自己有电的设备千万别开</b>，会烧掉，烧了要赔钱。</div>
+      <div>只有<b>电容麦克风</b>和<b>主动 DI 盒</b>需要幻象供电；其它<b>自己有电的设备千万别开</b>，会烧掉，烧了要赔钱。</div>
     </div>
 
     <h3><span class="num">3</span>DI 盒（乐器进调音台）</h3>
@@ -404,6 +418,68 @@
     <div class="note info">
       <div class="ni">🎧</div>
       <div><b>提醒</b>：返听（Monitor）的声音通常使用<b>推子前（Pre-fader）</b>发送给返听音箱——这样返听音量<b>不受主推子（Fader）位置影响</b>，伴奏与人声都能稳定送达。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ⑤ Q&A ================= -->
+<section id="qa">
+  <div class="wrap">
+    <span class="eyebrow">P05 Q&amp;A</span>
+    <h2>新手常见问题 Q&amp;A</h2>
+    <p class="lead">收集入门新手常踩的坑和疑惑，尽量用一句话讲明白。点击问题展开看答案。</p>
+    <div class="sep"></div>
+
+    <div class="faq">
+      <details open>
+        <summary>
+          <span class="q">Q</span>
+          <span>键盘有 L/R 输出，插一路和插两路有区别吗？</span>
+          <span class="ar">▾</span>
+        </summary>
+        <div class="ans">
+          <p><b>接 L（单声道）</b>：丢失立体声的<b>宽度、空间、音色</b>。</p>
+          <p><b>接 L + R（立体声）</b>：声音完整。</p>
+          <p class="muted">按需接线即可。</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <span class="q">Q</span>
+          <span>插吉他和贝斯，能用大三芯吗？</span>
+          <span class="ar">▾</span>
+        </summary>
+        <div class="ans">
+          <p><b>能插，但别把大三芯（TRS）当平衡线用。</b>它不会让非平衡变平衡。吉他/贝斯标准做法是 <b>TS 大二芯</b> 或 <b>DI 盒</b>。</p>
+
+          <h4 style="margin-top:10px">① 先分清两种线（6.35mm 接头外观几乎一样）</h4>
+          <div class="grid g2">
+            <div class="card"><h4>🔩 TS 大二芯（2 触点）</h4><p>Tip=信号、Sleeve=地，<b>非平衡</b>，吉他/贝斯标准线。</p></div>
+            <div class="card"><h4>🔧 TRS 大三芯（3 触点）</h4><p>Tip=正、Ring=负、Sleeve=地，可当<b>平衡线</b>，也可传<b>立体声</b>。</p></div>
+          </div>
+
+          <div class="note warn">
+            <div class="ni">⚠️</div>
+            <div><b>吉他/贝斯用不上 TRS 的"平衡"。</b></div>
+            <div style="margin-top:8px">拾音器是<b>非平衡高阻</b>信号，<b>平衡需要发送端也平衡</b>——吉他这头不是，换多贵的线也<b>不会变平衡</b>。</div>
+            <div style="margin-top:8px">TRS 的 Ring 悬空，部分设备会<b>信号减半、拾噪或接触不良</b>。</div>
+          </div>
+
+          <h4 style="margin-top:10px">② 什么时候才真正用得上大三芯？</h4>
+          <ul class="clean" style="margin-top:6px">
+            <li><b>立体声吉他</b>（双拾音）：TRS<b>传两个声道</b>（Tip=一路、Ring=一路），是<b>立体声</b>用法，需<b>TRS 转两个 TS</b> 分线。</li>
+            <li><b>设备平衡长距离</b>输出：那是<b>设备端</b>的事，跟吉他这头无关。</li>
+          </ul>
+
+          <div class="note info">
+            <div class="ni">🧭</div>
+            <div><b>要平衡、长距离怎么办？</b>——<b>用 DI 盒</b>。</div>
+            <div style="margin-top:8px">吉他 <b>TS 进 → DI → XLR 出</b>，才真正<b>平衡</b>，长距离不衰减。</div>
+            <div style="margin-top:8px">一句话：<b>要平衡，靠 DI 盒。</b></div>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 </section>
